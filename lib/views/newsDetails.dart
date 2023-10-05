@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_wave/date_converter.dart';
+import 'package:news_wave/views/news_webView.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../news_model.dart';
 
@@ -110,7 +111,13 @@ class NewsDetail extends StatelessWidget {
                   backgroundColor: const Color(0xFF2074A9),
                   label: const Text('See Full Article'),
                   onPressed: () {
-                    launchUrl(Uri.parse(article.url!));
+                    // launchUrl(Uri.parse(article.url!));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsWebView(url: article.url!),
+                      ),
+                    );
                   },
                 ),
               ),
