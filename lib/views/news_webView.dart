@@ -22,7 +22,6 @@ class NewsWebView extends StatelessWidget {
         ),
       ),
       body: InAppWebView(
-
         initialUrlRequest: URLRequest(
           url: Uri.parse(url),
         ),

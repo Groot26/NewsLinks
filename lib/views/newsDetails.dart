@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_wave/date_converter.dart';
 import 'package:news_wave/views/news_webView.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../news_model.dart';
 
 class NewsDetail extends StatelessWidget {
@@ -91,7 +89,9 @@ class NewsDetail extends StatelessWidget {
                       ),
                     ),
               const SizedBox(height: 15),
-              const Text(
+              article.description == null
+                  ? Container()
+                  : const Text(
                 'Overview',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
@@ -99,6 +99,7 @@ class NewsDetail extends StatelessWidget {
                   ? Container()
                   : Text(
                       article.description!,
+                //style: const TextStyle(fontFamily:'Poppins' ),
                     ),
               const SizedBox(height: 20),
               article.content == null
