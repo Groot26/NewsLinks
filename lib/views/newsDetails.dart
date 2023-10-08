@@ -27,13 +27,13 @@ class NewsDetail extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 article.title!,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 18,
@@ -44,7 +44,8 @@ class NewsDetail extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(
                         fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) => Container(),
+                        errorBuilder: (context, error, stackTrace) =>
+                            Container(),
                         loadingBuilder: (BuildContext context, Widget child,
                             ImageChunkEvent? loadingProgress) {
                           if (loadingProgress == null) return child;
@@ -52,9 +53,10 @@ class NewsDetail extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(80),
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
                                     ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
+                                        loadingProgress.expectedTotalBytes!
                                     : null,
                               ),
                             ),
@@ -69,21 +71,28 @@ class NewsDetail extends StatelessWidget {
                   : Text(
                       dateConverter(article.publishedAt!),
                       overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Color(0xFF797A7B),fontSize: 12),
+                      style: const TextStyle(
+                          color: Color(0xFF797A7B), fontSize: 12),
                     ),
               const SizedBox(height: 5),
               article.author == null
                   ? const Text('')
                   : RichText(
-                      text:  TextSpan(
+                      text: TextSpan(
                         children: <TextSpan>[
                           const TextSpan(
                             text: 'Published By:\n',
-                            style: TextStyle(color: Color(0xFF57595A),fontWeight: FontWeight.w500,fontSize: 14),
+                            style: TextStyle(
+                                color: Color(0xFF57595A),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14),
                           ),
                           TextSpan(
                             text: article.author!,
-                            style:  const TextStyle(color: Color(0xFF2074A9),fontSize: 18, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                color: Color(0xFF2074A9),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -92,20 +101,23 @@ class NewsDetail extends StatelessWidget {
               article.description == null
                   ? Container()
                   : const Text(
-                'Overview',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
+                      'Overview',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    ),
               article.description == null
                   ? Container()
                   : Text(
                       article.description!,
-                //style: const TextStyle(fontFamily:'Poppins' ),
+                      //style: const TextStyle(fontFamily:'Poppins' ),
                     ),
               const SizedBox(height: 20),
-              article.content == null
+              article.content == null || article.content!.isEmpty
                   ? Container()
-                  : Text(article.content!
-                      .substring(0, article.content!.length - 13)),
+                  : Text(
+                      article.content!
+                          .substring(0, article.content!.length - 13),
+                    ),
               const SizedBox(height: 10),
               Center(
                 child: FloatingActionButton.extended(

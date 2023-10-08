@@ -1,3 +1,4 @@
+import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
@@ -16,11 +17,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<NewsArticle> newsData;
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    print('printing...');
     newsData = fetchNewsData();
   }
 
@@ -36,14 +37,30 @@ class _HomePageState extends State<HomePage> {
           semanticsLabel: 'Logo',
           fit: BoxFit.none,
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-          )
+        actions: [
+          AnimSearchBar(
+            width: 300,
+            textController: searchController,
+            onSuffixTap: () {
+              setState(() {
+                searchController.clear();
+              });
+            },
+            //color: Colors.red[200]!,
+            helpText: "Search Text...",
+            autoFocus: true,
+            closeSearchOnSuffixTap: true,
+            //animationDurationInMilli: 2000,
+            rtl: true,
+            onSubmitted: (String) {},
+          ),
+          // Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: 15),
+          //   child: Icon(
+          //     Icons.search,
+          //     color: Colors.black,
+          //   ),
+          // )
         ],
       ),
       body: FutureBuilder<NewsArticle>(
@@ -109,28 +126,39 @@ class NewsCard extends StatelessWidget {
                       children: [
                         article.urlToImage == null
                             ? Container()
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (context, error, stackTrace) => Container(),
-                                  loadingBuilder: (BuildContext context, Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(80),
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                              : null,
+                            : Container(
+                                width: 370,
+                                height: 200,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    fit: BoxFit.fill,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(),
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(80),
+                                          child: CircularProgressIndicator(
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  //height: 150,
-                                  '${article.urlToImage}',
+                                      );
+                                    },
+                                    //height: 150,
+                                    '${article.urlToImage}',
+                                  ),
                                 ),
                               ),
                         const SizedBox(height: 8),
@@ -146,13 +174,13 @@ class NewsCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child:
-                          Text(
+                              vertical: 5, horizontal: 10),
+                          child: Text(
                             dateConverter(article.publishedAt!),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 12,color: Color(0xFF797A7B)),
+                            style: const TextStyle(
+                                fontSize: 12, color: Color(0xFF797A7B)),
                           ),
                         ),
                       ],
@@ -160,7 +188,10 @@ class NewsCard extends StatelessWidget {
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15,),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(
+                height: 15,
+              ),
             ),
           ),
         ),

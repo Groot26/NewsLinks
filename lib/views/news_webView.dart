@@ -2,9 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
 
-class NewsWebView extends StatelessWidget {
+
+class NewsWebView extends StatefulWidget {
   final String url;
-  const NewsWebView({super.key, required this.url});
+
+  const NewsWebView({
+    super.key,
+    required this.url,
+  });
+
+  @override
+  State<NewsWebView> createState() => _NewsWebViewState();
+}
+
+class _NewsWebViewState extends State<NewsWebView> {
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +33,27 @@ class NewsWebView extends StatelessWidget {
           fit: BoxFit.none,
         ),
       ),
-      body: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: Uri.parse(url),
-        ),
+      body: Stack(
+        children: [
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : const SizedBox(),
+          Column(
+            children: [
+              Expanded(
+                child: InAppWebView(
+                    initialUrlRequest: URLRequest(
+                      url: Uri.parse(widget.url),
+                    ),
+                    onLoadStop: (controller, url) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
