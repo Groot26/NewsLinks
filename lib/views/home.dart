@@ -37,30 +37,30 @@ class _HomePageState extends State<HomePage> {
           semanticsLabel: 'Logo',
           fit: BoxFit.none,
         ),
-        actions: [
-          AnimSearchBar(
-            width: 300,
-            textController: searchController,
-            onSuffixTap: () {
-              setState(() {
-                searchController.clear();
-              });
-            },
-            //color: Colors.red[200]!,
-            helpText: "Search Text...",
-            autoFocus: true,
-            closeSearchOnSuffixTap: true,
-            //animationDurationInMilli: 2000,
-            rtl: true,
-            onSubmitted: (String) {},
-          ),
-          // Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: 15),
-          //   child: Icon(
-          //     Icons.search,
-          //     color: Colors.black,
-          //   ),
-          // )
+        actions: const [
+          // AnimSearchBar(
+          //   width: 300,
+          //   textController: searchController,
+          //   onSuffixTap: () {
+          //     setState(() {
+          //       searchController.clear();
+          //     });
+          //   },
+          //   //color: Colors.red[200]!,
+          //   helpText: "Search Text...",
+          //   autoFocus: true,
+          //   closeSearchOnSuffixTap: true,
+          //   //animationDurationInMilli: 2000,
+          //   rtl: true,
+          //   onSubmitted: (String) {},
+          // ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+          )
         ],
       ),
       body: FutureBuilder<NewsArticle>(

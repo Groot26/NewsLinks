@@ -118,6 +118,18 @@ class NewsDetail extends StatelessWidget {
                       article.content!
                           .substring(0, article.content!.length - 13),
                     ),
+              article.description == null
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 25),
+                        child: SvgPicture.asset(
+                          'images/PoorData.svg',
+                          semanticsLabel: 'Logo',
+                          fit: BoxFit.none,
+                        ),
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 10),
               Center(
                 child: FloatingActionButton.extended(
