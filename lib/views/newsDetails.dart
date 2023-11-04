@@ -136,7 +136,6 @@ class NewsDetail extends StatelessWidget {
                   backgroundColor: const Color(0xFF2074A9),
                   label: const Text('See Full Article'),
                   onPressed: () {
-                    // launchUrl(Uri.parse(article.url!));
                     Navigator.push(
                       context,
                       MaterialPageRoute(

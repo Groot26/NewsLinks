@@ -1,97 +1,132 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:news_wave/date_converter.dart';
-import 'package:news_wave/views/login.dart';
-import 'package:news_wave/views/searchScreen.dart';
+import 'package:intl/intl.dart';
 import '../api_key.dart';
+import '../date_converter.dart';
 import '../news_model.dart';
 import 'newsDetails.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late Future<NewsArticle> newsData;
-  final searchController = TextEditingController();
+class _SearchScreenState extends State<SearchScreen> {
+  Future<NewsArticle>? newsData;
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    newsData = fetchNewsData();
+    newsData = fetchSearchNewsData("Trending");
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: SvgPicture.asset(
-          'images/NewsLinksLogo.svg',
-          semanticsLabel: 'Logo',
-          fit: BoxFit.none,
-        ),
-        actions:  [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>  const SearchScreen(), //Login(), //
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.search,
-                color: Colors.black,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back),
+                      ),
+                    ),
+                    Container(
+                      width: size.width * 0.86,
+                      child: SearchBar(
+                        elevation: MaterialStateProperty.all(3),
+                        hintText: 'Search....',
+                        //hintStyle: MaterialStateProperty.all(const TextStyle(color: Colors.grey)),
+                        textStyle: MaterialStateProperty.all(const TextStyle(
+                            color: Colors.black, decoration: TextDecoration.none)),
+                        side: MaterialStateProperty.all(
+                            const BorderSide(color: Colors.blueAccent)),
+                        controller: controller,
+                        padding: const MaterialStatePropertyAll<EdgeInsets>(
+                            EdgeInsets.symmetric(horizontal: 16)),
+                        onTap: () {
+                          //controller.openView();
+                        },
+                        onChanged: (_) {
+                          print("------------------Searching--------------------");
+                          print(controller.value.text);
+                          newsData = fetchSearchNewsData(controller.value.text);
+                        },
+                        onSubmitted: (_) {
+                          print("-------------------Submit-------------------");
+                          print(controller.value.text);
+                          newsData = fetchSearchNewsData(controller.value.text);
+                        },
+                        leading: const Icon(Icons.search),
+                        trailing: <Widget>[
+                          Tooltip(
+                            message: 'Cancel',
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  controller.clear();
+                                });
+                              },
+                              icon: const Icon(Icons.close),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-      body: FutureBuilder<NewsArticle>(
-        future: newsData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final newsData = snapshot.data;
-            return NewsCard(newsData: newsData!);
-          }
-        },
+              SizedBox(
+                height: size.height *0.8648,
+                child: FutureBuilder<NewsArticle>(
+                  future: newsData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (newsData == null) {
+                      return const Center(child: Text('Error'));
+                    } else {
+                      final newsData = snapshot.data;
+                      return SearchCard(newsData: newsData!);
+                    }
+                  },
+                ),
+              )
+              //:Container(),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class NewsCard extends StatelessWidget {
+
+class SearchCard extends StatelessWidget {
   final NewsArticle newsData;
 
-  const NewsCard({super.key, required this.newsData});
+  const SearchCard({super.key, required this.newsData});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // const Text(
-        //   'Top Stories',
-        //   style: TextStyle(
-        //     fontSize: 22,
-        //     fontFamily: 'Poppins',
-        //     fontWeight: FontWeight.w600,
-        //   ),
-        // ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -121,13 +156,13 @@ class NewsCard extends StatelessWidget {
                       children: [
                         article.urlToImage == null
                             ? Container()
-                            : Container(
+                            : SizedBox(
                                 width: double.maxFinite,
                                 height: 200,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
                                   child: Image.network(
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
                                             Container(),
@@ -183,10 +218,7 @@ class NewsCard extends StatelessWidget {
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                height: 15,
-              ),
+              separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15),
             ),
           ),
         ),
@@ -196,8 +228,15 @@ class NewsCard extends StatelessWidget {
 }
 
 //Api
-Future<NewsArticle> fetchNewsData() async {
-  final response = await http.get(Uri.parse('https://newsapi.org/v2/top-headlines?country=in&apiKey=$apiKey')); //ADD api key
+Future<NewsArticle> fetchSearchNewsData(suggestion) async {
+
+  final DateTime now = DateTime.now().subtract(const Duration(days:1));
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  final String date = formatter.format(now);
+  print(date); // something like 2013-04-20
+
+  final response = await http.get(Uri.parse(
+      'https://newsapi.org/v2/everything?q=$suggestion&from=$date&sortBy=popularity&apiKey=$apiKey')); //ADD api key
 
   if (response.statusCode == 200) {
     return NewsArticle.fromJson(jsonDecode(response.body));
