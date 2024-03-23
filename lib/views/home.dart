@@ -156,9 +156,9 @@ class NewsCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 10),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 2),
                           child: Text(
                             article.title!,
                             maxLines: 2,

@@ -1,7 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+
 import '../api_key.dart';
 import '../date_converter.dart';
 import '../news_model.dart';
@@ -39,7 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pop(context);
                         },
                         child: Icon(Icons.arrow_back),
@@ -52,7 +54,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         hintText: 'Search....',
                         //hintStyle: MaterialStateProperty.all(const TextStyle(color: Colors.grey)),
                         textStyle: MaterialStateProperty.all(const TextStyle(
-                            color: Colors.black, decoration: TextDecoration.none)),
+                            color: Colors.black,
+                            decoration: TextDecoration.none)),
                         side: MaterialStateProperty.all(
                             const BorderSide(color: Colors.blueAccent)),
                         controller: controller,
@@ -62,7 +65,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           //controller.openView();
                         },
                         onChanged: (_) {
-                          print("------------------Searching--------------------");
+                          print(
+                              "------------------Searching--------------------");
                           print(controller.value.text);
                           newsData = fetchSearchNewsData(controller.value.text);
                         },
@@ -91,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
               SizedBox(
-                height: size.height *0.8648,
+                height: size.height * 0.8648,
                 child: FutureBuilder<NewsArticle>(
                   future: newsData,
                   builder: (context, snapshot) {
@@ -116,7 +120,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
-
 
 class SearchCard extends StatelessWidget {
   final NewsArticle newsData;
@@ -218,7 +221,8 @@ class SearchCard extends StatelessWidget {
                   ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(height: 15),
             ),
           ),
         ),
@@ -229,8 +233,7 @@ class SearchCard extends StatelessWidget {
 
 //Api
 Future<NewsArticle> fetchSearchNewsData(suggestion) async {
-
-  final DateTime now = DateTime.now().subtract(const Duration(days:1));
+  final DateTime now = DateTime.now().subtract(const Duration(days: 2));
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   final String date = formatter.format(now);
   print(date); // something like 2013-04-20
