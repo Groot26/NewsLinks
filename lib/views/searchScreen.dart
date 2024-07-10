@@ -48,18 +48,19 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     Container(
-                      width: size.width * 0.86,
+                      width: size.width * 0.8,
                       child: SearchBar(
-                        elevation: MaterialStateProperty.all(3),
+                        elevation: WidgetStateProperty.all(3),
                         hintText: 'Search....',
                         //hintStyle: MaterialStateProperty.all(const TextStyle(color: Colors.grey)),
                         textStyle: MaterialStateProperty.all(const TextStyle(
-                            color: Colors.black,
+                            // color: Colors.black,
                             decoration: TextDecoration.none)),
-                        side: MaterialStateProperty.all(
-                            const BorderSide(color: Colors.blueAccent)),
+                        // side: MaterialStateProperty.all(
+                        //     const BorderSide(color: Colors.blueAccent)
+                        // ),
                         controller: controller,
-                        padding: const MaterialStatePropertyAll<EdgeInsets>(
+                        padding: const WidgetStatePropertyAll<EdgeInsets>(
                             EdgeInsets.symmetric(horizontal: 16)),
                         onTap: () {
                           //controller.openView();
@@ -153,7 +154,7 @@ class SearchCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    color: Colors.white,
+                    // color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -213,7 +214,9 @@ class SearchCard extends StatelessWidget {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                                fontSize: 12, color: Color(0xFF797A7B)),
+                                fontSize: 12,
+                                // color: Color(0xFF797A7B)
+                            ),
                           ),
                         ),
                       ],

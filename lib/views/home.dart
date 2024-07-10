@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_wave/date_converter.dart';
@@ -39,6 +40,17 @@ class _HomePageState extends State<HomePage> {
           fit: BoxFit.none,
         ),
         actions:  [
+          // IconButton(
+          //   onPressed: () {
+          //     Get.changeTheme(Get.isDarkMode?ThemeData.light() : ThemeData.dark());
+          //      // Get.changeThemeMode(Get.isDarkMode? ThemeMode.light : ThemeMode.dark);
+          //     print(Get.isDarkMode);
+          //
+          //   },
+          //   icon: const Icon(
+          //     Icons.dark_mode_rounded
+          //   ),
+          // ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: IconButton(
@@ -52,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(
                 Icons.search,
-                color: Colors.black,
+                // color: Colors.black,
               ),
             ),
           )
@@ -115,7 +127,7 @@ class NewsCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    color: Colors.white,
+                    // color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,8 +186,9 @@ class NewsCard extends StatelessWidget {
                             dateConverter(article.publishedAt!),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 12, color: Color(0xFF797A7B)),
+                            style: const TextStyle(fontSize: 12,
+                                // color: Color(0xFF797A7B)
+                            ),
                           ),
                         ),
                       ],

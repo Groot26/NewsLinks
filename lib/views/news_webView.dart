@@ -1,3 +1,4 @@
+import 'package:adblocker_webview/adblocker_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,16 +17,24 @@ class NewsWebView extends StatefulWidget {
 }
 
 class _NewsWebViewState extends State<NewsWebView> {
+  final _adBlockerWebviewController = AdBlockerWebviewController.instance;
   bool isLoading = true;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _adBlockerWebviewController.initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        // iconTheme: const IconThemeData(color: Colors.black),
         //automaticallyImplyLeading: false,
         centerTitle: true,
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 2,
         title: SvgPicture.asset(
           'images/NewsLinksLogo.svg',
@@ -33,7 +42,8 @@ class _NewsWebViewState extends State<NewsWebView> {
           fit: BoxFit.none,
         ),
       ),
-      body: Stack(
+      body:
+      Stack(
         children: [
           isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -41,15 +51,15 @@ class _NewsWebViewState extends State<NewsWebView> {
           Column(
             children: [
               Expanded(
-                child: InAppWebView(
-                    initialUrlRequest: URLRequest(
-                      url: Uri.parse(widget.url),
-                    ),
-                    onLoadStop: (controller, url) {
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }),
+                child: AdBlockerWebview(url: Uri.parse(widget.url),
+                    adBlockerWebviewController: _adBlockerWebviewController,
+                    shouldBlockAds: true,
+                      onLoadFinished: (controller, url) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                        },
+                ),
               ),
             ],
           ),
